@@ -7,6 +7,7 @@ const config = [
 function App() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  
   return (
     <div className="content-container">
       <div className="App">
@@ -17,14 +18,18 @@ function App() {
               PROJECT 2021
             </div>
           </div>
+          <div>
           <div className="input-title">
             username
-            <input onChange={(event) => setUsername(event.target.value)} />
+            <input className="specific-input" onChange={(event) => setUsername(event.target.value)} />
           </div>
           <div className="input-title">
             password
             <input className="specific-input" type="password" onChange={(event) => setPassword(event.target.value)} />
           </div>
+            </div>
+
+          
           
         
         <div className="button-area">
