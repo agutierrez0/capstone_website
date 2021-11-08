@@ -3,10 +3,9 @@ import './navbar.css';
 
 export default function Navbar() {
     return <ul>
-    <li><a href="#">Home</a></li>
-    <li><a href="#">News</a></li>
-    <li><a href="#">Contact</a></li>
-    <li><a href="#">About</a></li>
-    <li style={{float: 'right'}}><a className="active" href="#">About</a></li>
+    <li><a className="active" href="/">Operate</a></li>
+    <li><a href="/">Settings</a></li>
+    <li><a href="/">Data</a></li>
+    <li><a href="/">About</a></li>
   </ul>
 }
