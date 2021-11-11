@@ -4,3 +4,21 @@
     align-items: center;
     flex-direction: column;
 }
+
+.global-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+.input-section {
+    display: flex;
+    justify-content: center;
+    
+    flex-direction: column;
+    border-style: solid;
+    padding: 1%;
+}
