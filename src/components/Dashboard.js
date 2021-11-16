@@ -23,25 +23,33 @@ export default function Dashboard() {
     function getBluetoothDevice() {
         let config = { filters: [{ name: 'Long name works now' }], optionalServices: [serviceName]}
         navigator.bluetooth.requestDevice(config)
-        .then(device => {
-            console.log(device)
-            console.log(device.name)
-            return device.gatt.connect()
-
-        })
+        .then(device => device.gatt.connect())
         .then(server => server.getPrimaryService(serviceName))
         .then(service => {
             console.log('service accessed')
             return service.getCharacteristic(characteristicName);
+            //return service.getCharacteristics()
         })
         .then(characteristic => {
             console.log('characteristic accessed')
+            //console.log(characteristics)
+            
             return characteristic.readValue();
+            //return
         })
         .then(value => {
+            var z = new TextDecoder()
             console.log('value accessed')
             console.log(`Message raw: ${value}`);
+            console.log({value})
             console.log(`Message: ${value.getUint8(0)}`);
+            var something = z.decode(value)
+            console.log(something)
+            //console.log('value accessed')
+            //console.log(`Message raw: ${value}`);
+            //value.setUint8(1, 255)
+            //console.log(`Message: ${value.getUint8(0)}`);
+            
           })
         .catch(error => { console.error(error); });
     }
