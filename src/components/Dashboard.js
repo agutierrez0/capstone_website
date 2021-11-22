@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.css';
 import Navbar from './modules/Navbar'
 
@@ -6,6 +6,7 @@ const serviceName = '4fafc201-1fb5-459e-8fcc-c5c9c331914b'
 const characteristicName = 'beb5483e-36e1-4688-b7f5-ea07361b26a8'
 
 export default function Dashboard() {
+    const [myChar, setMyChar] = useState(null)
 
     useEffect(() => {
         var modal = document.getElementById('myModal');
@@ -20,6 +21,26 @@ export default function Dashboard() {
         }
     }, [])
 
+    function beginProcess(event) {
+        var myInterval = setInterval(() => {
+            event.readValue()
+            .then(value => {
+                console.log({value})
+
+                console.log('uint8 check: ')
+                console.log(value.getUint8(0))
+                console.log('this is in handleSensorValueChanged')
+                var encoder = new TextDecoder();
+                const infoFromESP32 = encoder.decode(value)
+                console.log(infoFromESP32)
+
+                if (value.getUint8(0) === 10) {
+                    clearInterval(myInterval)
+                }
+            })   
+        }, 1000)
+    }
+
     function getBluetoothDevice() {
         let config = { filters: [{ name: 'Long name works now' }], optionalServices: [serviceName]}
         navigator.bluetooth.requestDevice(config)
@@ -31,27 +52,44 @@ export default function Dashboard() {
             //return service.getCharacteristics()
         })
         .then(characteristic => {
-            console.log('characteristic accessed')
-            //console.log(characteristics)
-            
+            console.log(characteristic)
+            //characteristic.startNotifications();
+            setMyChar(characteristic)
+            //characteristic.addEventListener('characteristicvaluechanged', handleSensorValueChange);
+            // Reading Battery Level…
+
             return characteristic.readValue();
-            //return
+            //characteristic.oncharacteristicvaluechanged = handleSensorValueChange
+            //characteristic.startNotifications()
+            //return characteristic.readValue();
         })
         .then(value => {
-            var z = new TextDecoder()
-            console.log('value accessed')
+            if (myChar) {
+                myChar.readValue()
+                .then(value => {
+                    console.log('testingggggg')
+                    console.log(value)
+                })
+                setTimeout(() => console.log('sleep'), 3000)
+            }
+            
+            //var z = new TextDecoder()
+            //console.log('value accessed')
             console.log(`Message raw: ${value}`);
-            console.log({value})
-            console.log(`Message: ${value.getUint8(0)}`);
-            var something = z.decode(value)
-            console.log(something)
+            //console.log({value})
+            //console.log(`Message: ${value.getUint8(0)}`);
+            //var something = z.decode(value)
+            //console.log(something)
             //console.log('value accessed')
             //console.log(`Message raw: ${value}`);
             //value.setUint8(1, 255)
             //console.log(`Message: ${value.getUint8(0)}`);
-            
+            return;
           })
-        .catch(error => { console.error(error); });
+        .catch(error => { return console.error(error); });
+
+        
+        
     }
 
     return <div>
@@ -59,12 +97,13 @@ export default function Dashboard() {
                 <div id="myContainer" className="dash-container">
                     <h2> Welcome to RC Automapper </h2>
 
-                    <div id="myModal" class="Modal is-hidden is-visuallyHidden">
-                        <div class="Modal-content">
-                            <span id="closeModal" class="Close">&times;</span>
-                            <p>Simple Modal</p>
-                        </div>
-                    </div>
+                    {myChar ? <div> 
+
+
+                        <button onClick={() => beginProcess(myChar)}>
+                            check char
+                        </button>
+                         </div> : null }
 
                     <div className="button-section-dash">
                         <button onClick={getBluetoothDevice}>Connect RC Car</button>
