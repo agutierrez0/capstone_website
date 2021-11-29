@@ -1,113 +1,116 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './styles.css';
 import Navbar from './modules/Navbar'
 
 const serviceName = '4fafc201-1fb5-459e-8fcc-c5c9c331914b'
-const characteristicName = 'beb5483e-36e1-4688-b7f5-ea07361b26a8'
 
+const uuids = ['beb5483e-36e1-4688-b7f5-ea07361b26a8', '5d0faa6a-5086-11ec-bf63-0242ac130002']
+/*
+const uuidToWord = {
+    'beb5483e-36e1-4688-b7f5-ea07361b26a8' : 'topic',
+    '5d0faa6a-5086-11ec-bf63-0242ac130002' : 'data'
+}
+*/
 export default function Dashboard() {
-    const [myChar, setMyChar] = useState(null)
+    const [myDevice, setMyDevice] = useState(null)
+    const [myServer, setMyServer] = useState(false)
 
-    useEffect(() => {
-        var modal = document.getElementById('myModal');
-        var container = document.getElementById('myContainer');
-        if (modal && container) {
-            modal.className = "Modal is-visuallyHidden";
-            setTimeout(function() {
-                container.className = "MainContainer is-blurred";
-                modal.className = "Modal";
-            }, 100);
-            container.parentElement.className = "ModalOpen";
-        }
-    }, [])
-
-    function beginProcess(event) {
-        var myInterval = setInterval(() => {
-            event.readValue()
+    function readCharacteristicValue(uuid) {
+        if (myServer) {
+            myServer.getPrimaryService(serviceName)
+            .then(service => service.getCharacteristic(uuid))
+            .then(characteristic => characteristic.readValue())
             .then(value => {
-                console.log({value})
+                if (value) {
+                    var decoder = new TextDecoder()
+                    const message = decoder.decode(value)
+                
+                    if (message.length === 4) {
+                        console.log(`message isn't string: ${value.getUint8(0)}`)
+                        const dataElement = document.getElementById('data-value')
+                        dataElement.innerText = `data: ${value.getUint8(0)} cm`
 
-                console.log('uint8 check: ')
-                console.log(value.getUint8(0))
-                console.log('this is in handleSensorValueChanged')
-                var encoder = new TextDecoder();
-                const infoFromESP32 = encoder.decode(value)
-                console.log(infoFromESP32)
-
-                if (value.getUint8(0) === 10) {
-                    clearInterval(myInterval)
+                    } else {
+                        console.log(`message is string: ${message}`)
+                        const topicElement = document.getElementById('topic-value')
+                        topicElement.innerText = `topic: ${message}`
+                        return message
+                    }
+                } else {
+                    alert('error reading value')
                 }
-            })   
-        }, 1000)
+                return;
+            })
+            .catch(error => { return console.error(error); });
+            return;
+        }
+    }
+
+    function getCharacteristics() {
+        myServer.getPrimaryService(serviceName)
+        .then(service => {
+            console.log('service accessed')
+            return service.getCharacteristics();
+        })
+        .then(_ => {
+            var count = 0;
+            var myInterval = setInterval(() => {
+                readCharacteristicValue(uuids[0])
+                readCharacteristicValue(uuids[1])
+                if (count === 100) { clearInterval(myInterval) }
+                count = count + 1;
+            }, 1000)
+        })
+        .catch(error => { return console.error(error); });
+        return;
+    }
+
+    function connectToGattServer() {
+        console.log('here')
+        if (myDevice) {
+            console.log('here1')
+            myDevice.gatt.connect()
+            .then(server => {
+                console.log('here2')
+                if (server) {
+                    setMyServer(server)
+                }
+                return;
+            })
+            .catch(error => { return console.error(error); });
+            console.log('here3')
+            return;
+        } else {
+            console.log('here4')
+            return alert('device is invalid')
+        }
     }
 
     function getBluetoothDevice() {
         let config = { filters: [{ name: 'Long name works now' }], optionalServices: [serviceName]}
         navigator.bluetooth.requestDevice(config)
-        .then(device => device.gatt.connect())
-        .then(server => server.getPrimaryService(serviceName))
-        .then(service => {
-            console.log('service accessed')
-            return service.getCharacteristic(characteristicName);
-            //return service.getCharacteristics()
-        })
-        .then(characteristic => {
-            console.log(characteristic)
-            //characteristic.startNotifications();
-            setMyChar(characteristic)
-            //characteristic.addEventListener('characteristicvaluechanged', handleSensorValueChange);
-            // Reading Battery Level…
-
-            return characteristic.readValue();
-            //characteristic.oncharacteristicvaluechanged = handleSensorValueChange
-            //characteristic.startNotifications()
-            //return characteristic.readValue();
-        })
-        .then(value => {
-            if (myChar) {
-                myChar.readValue()
-                .then(value => {
-                    console.log('testingggggg')
-                    console.log(value)
-                })
-                setTimeout(() => console.log('sleep'), 3000)
+        .then(device => {
+            if (device) {
+                setMyDevice(device)
             }
-            
-            //var z = new TextDecoder()
-            //console.log('value accessed')
-            console.log(`Message raw: ${value}`);
-            //console.log({value})
-            //console.log(`Message: ${value.getUint8(0)}`);
-            //var something = z.decode(value)
-            //console.log(something)
-            //console.log('value accessed')
-            //console.log(`Message raw: ${value}`);
-            //value.setUint8(1, 255)
-            //console.log(`Message: ${value.getUint8(0)}`);
             return;
-          })
+        })
         .catch(error => { return console.error(error); });
-
-        
-        
+        return;
     }
 
     return <div>
                 <Navbar />
                 <div id="myContainer" className="dash-container">
                     <h2> Welcome to RC Automapper </h2>
+                    {myDevice ? <div>{myDevice.name} is connected <button onClick={connectToGattServer}>connect to gatt server</button> </div> : <button onClick={getBluetoothDevice}>connect device</button>}
+                    {myServer && myDevice ? <div>
+                        <div>connected to gatt server </div>
+                        <button onClick={getCharacteristics}>read characteristics</button>
+                        <div id="topic-value"></div>
+                        <div id="data-value"></div>
+                    </div> : null}
 
-                    {myChar ? <div> 
-
-
-                        <button onClick={() => beginProcess(myChar)}>
-                            check char
-                        </button>
-                         </div> : null }
-
-                    <div className="button-section-dash">
-                        <button onClick={getBluetoothDevice}>Connect RC Car</button>
-                    </div>
                 </div>
             </div>
 }
