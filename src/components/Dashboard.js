@@ -138,7 +138,7 @@ export default function Dashboard() {
                         </div> 
                         :
                         <div className="connect-device-section">
-                            <h4>Please connect the device.</h4>
+                            <h4>Please connect the device</h4>
                             <button onClick={getBluetoothDevice}>Search for bluetooth device</button>
                         </div>}
                     </div>
