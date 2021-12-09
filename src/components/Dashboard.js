@@ -40,7 +40,7 @@ export default function Dashboard() {
                     const thisElement = document.getElementById(elementId)
                     if (message.length === 4) {
                         console.log(`message isn't string: ${value.getUint8(0)}`)
-                        thisElement.innerText = `${value.getUint8(0)} cm`
+                        thisElement.innerText = `${value.getUint8(0)} ${elementId === 'manometer-reading' ? '°' : 'cm'}`
                     } else {
                         console.log(`message is string: ${message}`)
                         thisElement.innerText = message
