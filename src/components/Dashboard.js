@@ -3,13 +3,19 @@ import Navbar from './modules/Navbar'
 import './styles.css';
 
 const serviceName = '4fafc201-1fb5-459e-8fcc-c5c9c331914b'
-const uuids = ['beb5483e-36e1-4688-b7f5-ea07361b26a8', '5d0faa6a-5086-11ec-bf63-0242ac130002', '8fa2e117-e431-4dab-ab5a-24ba2067983d']
+const uuids = ['beb5483e-36e1-4688-b7f5-ea07361b26a8', '5d0faa6a-5086-11ec-bf63-0242ac130002', '8fa2e117-e431-4dab-ab5a-24ba2067983d', 'e4085858-2331-4b31-af03-f485127f2e29']
 
 export default function Dashboard() {
     const [myDevice, setMyDevice] = useState(null)
     const [myServer, setMyServer] = useState(false)
     const [switchToggle, setSwitchToggle] = useState(false)
     const [myInterval, setMyInterval] = useState(null)
+    const [active, setActive] = useState(false)
+
+    function handleReading() { 
+        writeCharacteristicValue(uuids[3])
+
+    }
 
     function handleToggleSwitch() { 
         if (!switchToggle) {
@@ -26,6 +32,22 @@ export default function Dashboard() {
             setMyInterval(null)
         }
         setSwitchToggle(!switchToggle)
+    }
+
+    function writeCharacteristicValue(uuid) {
+        let buffer = new ArrayBuffer(16); // create a buffer of length 16
+        let view = new Uint16Array (buffer);
+
+        view[0] = active ? 97 : 98
+        if (myServer) {
+            myServer.getPrimaryService(serviceName)
+            .then(service => service.getCharacteristic(uuid))
+            .then(characteristic => characteristic.writeValueWithResponse(view))
+            .then(res => console.log(res))
+            .catch(error => { return console.error(error); });
+        }
+        setActive(!active);
+        return;
     }
 
     function readCharacteristicValue(uuid, elementId) {
@@ -98,8 +120,12 @@ export default function Dashboard() {
                             <div className="connect-device-section">
                                 <div className="connected-section"><h4>GATT Server connected</h4>&nbsp;✅</div>
 
-                                <h4>Start / Stop reading characteristics</h4>
-                                
+                                <h4>START / STOP reading characteristics</h4>
+                                <label className="switch">
+                                    <input onClick={handleReading} type="checkbox" />
+                                    <span className="slider round"></span>
+                                </label> 
+                                <h4>SHOW VALUES</h4>
                                 <label className="switch">
                                     <input onClick={handleToggleSwitch} type="checkbox" />
                                     <span className="slider round"></span>
