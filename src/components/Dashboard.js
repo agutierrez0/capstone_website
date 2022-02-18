@@ -3,7 +3,13 @@ import Navbar from './modules/Navbar'
 import './styles.css';
 
 const serviceName = '4fafc201-1fb5-459e-8fcc-c5c9c331914b'
-const uuids = ['beb5483e-36e1-4688-b7f5-ea07361b26a8', '5d0faa6a-5086-11ec-bf63-0242ac130002', '8fa2e117-e431-4dab-ab5a-24ba2067983d', 'e4085858-2331-4b31-af03-f485127f2e29']
+const uuids = ['beb5483e-36e1-4688-b7f5-ea07361b26a8', 
+                '5d0faa6a-5086-11ec-bf63-0242ac130002', 
+                '8fa2e117-e431-4dab-ab5a-24ba2067983d', 
+                'e4085858-2331-4b31-af03-f485127f2e29',
+                '7d51feca-c876-4482-9a66-f0ccb953e732',
+                'efad2c23-a434-44c5-b232-82bbf9d12eb6',
+                '5b5b6f6d-c0da-45dc-ac12-afdb4e5a944e']
 
 export default function Dashboard() {
     const [myDevice, setMyDevice] = useState(null)
@@ -24,6 +30,9 @@ export default function Dashboard() {
                 readCharacteristicValue(uuids[0], 'ultrasonic-sensor')
                 readCharacteristicValue(uuids[1], 'movement-status')
                 readCharacteristicValue(uuids[2], 'manometer-reading')
+                readCharacteristicValue(uuids[3], 'left-reading')
+                readCharacteristicValue(uuids[4], 'front-reading')
+                readCharacteristicValue(uuids[5], 'right-reading')
             }, 1000))
         } else {            
             console.log('stop reading characteristics')
@@ -150,6 +159,18 @@ export default function Dashboard() {
                                         <tr>
                                             <td>Manometer Reading</td>
                                             <td id="manometer-reading"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Left Reading</td>
+                                            <td id="left-reading"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Front Reading</td>
+                                            <td id="front-reading"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Right Reading</td>
+                                            <td id="right-reading"></td>
                                         </tr>
                                     </tbody>
                                 </table> : null}
