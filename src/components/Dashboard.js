@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Navbar from './modules/Navbar'
+
 import './styles.css';
 
 const serviceName = '4fafc201-1fb5-459e-8fcc-c5c9c331914b'
@@ -25,7 +25,6 @@ export default function Dashboard() {
 
     function handleToggleSwitch() { 
         if (!switchToggle) {
-            console.log('start reading characteristics')
             setMyInterval(setInterval(() => {
                 readCharacteristicValue(uuids[0], 'ultrasonic-sensor')
                 readCharacteristicValue(uuids[1], 'movement-status')
@@ -35,8 +34,6 @@ export default function Dashboard() {
                 readCharacteristicValue(uuids[5], 'right-reading')
             }, 1000))
         } else {            
-            console.log('stop reading characteristics')
-            console.log(myInterval)
             clearInterval(myInterval)
             setMyInterval(null)
         }
@@ -66,6 +63,9 @@ export default function Dashboard() {
             .then(characteristic => characteristic.readValue())
             .then(value => {
                 if (value) {
+                    if (uuid == '7d51feca-c876-4482-9a66-f0ccb953e732') {
+                        console.log("IMPORTANT VALUE: ", value)
+                    }
                     var decoder = new TextDecoder()
                     const message = decoder.decode(value)
                     const thisElement = document.getElementById(elementId)
@@ -117,7 +117,7 @@ export default function Dashboard() {
     }
 
     return <div>
-                <Navbar />
+                
                 <div id="myContainer" className="dash-container">
                     <h2> Welcome to RC Automapper </h2>
 
