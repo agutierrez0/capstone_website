@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './data.css';
 import Map from './Map';
 
 export default function Data() {
     const [distanceInput, setDistanceInput] = useState('')
     const [angleInput, setAngleInput] = useState('')
-    const [data, setData] = useState([{x: 0, y: 20}, {x: 150, y: 700}, {x: 300, y: 100}, {x: 450, y: 20}, {x: 600, y: 130}])
+    const [data, setData] = useState([{x: 10, y: 20}, {x: 30, y: 50}, {x: 50, y: 140}])
 
     function handleNewData() {
-        const z = {x1: distanceInput, x2: Math.sin(angleInput)}
+        const previousPoints = data[data.length - 1]
+        console.log(angleInput)
+        console.log(distanceInput)
+        const radians = angleInput * (Math.PI / 180)
+        const x = Math.cos(radians)
+        const y = (-1) * Math.sin(radians)
+
+
+        const z = { x: previousPoints.x + (x * distanceInput), y: previousPoints.y + (y * distanceInput)}
         setData([...data, z])
-        setDistanceInput(null)
-        setAngleInput(null)
     }
+
+    useEffect(() => {
+        console.log(data)
+    }, [data])
 
     return <div className="data-container">
         <div className="data-input-section">
