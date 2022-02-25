@@ -63,7 +63,7 @@ export default function Dashboard() {
             .then(characteristic => characteristic.readValue())
             .then(value => {
                 if (value) {
-                    if (uuid == '7d51feca-c876-4482-9a66-f0ccb953e732') {
+                    if (uuid === '7d51feca-c876-4482-9a66-f0ccb953e732') {
                         console.log("IMPORTANT VALUE: ", value)
                     }
                     var decoder = new TextDecoder()
