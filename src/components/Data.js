@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './data.css';
 import Map from './Map';
 
@@ -20,10 +20,6 @@ export default function Data() {
         setData([...data, z])
     }
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
-
     return <div className="data-container">
         <div className="data-input-section">
             <div>
@@ -38,8 +34,13 @@ export default function Data() {
             
             <button onClick={handleNewData}>Add point</button>
         </div>
+        [<ul>
+            {data.map(d => <li>{d.x},{d.y}</li>)}
+        </ul>]
+        
 
         <div id="map-container-1" className="map-section">
+        
             <Map inputData={data} />
         </div>
     </div>
