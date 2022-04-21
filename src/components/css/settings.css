@@ -1,0 +1,14 @@
+.settings-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10%;
+}
+
+.settngs-input-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    flex-direction: column;
+}

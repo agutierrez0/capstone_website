@@ -97,3 +97,7 @@ button:focus {
     transform: rotate(360deg);
   }
 }
+
+html {
+  background-color: darkslategrey;
+}

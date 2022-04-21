@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './css/data.css';
-import Map from './Map';
+import Map from './map';
 
-export default function Data() {
+export default function Maps() {
     const [distanceInput, setDistanceInput] = useState('')
     const [angleInput, setAngleInput] = useState('')
     const [data, setData] = useState([{x: 10, y: 20}, {x: 30, y: 50}, {x: 50, y: 140}])
@@ -14,7 +14,6 @@ export default function Data() {
         const radians = angleInput * (Math.PI / 180)
         const x = Math.cos(radians)
         const y = (-1) * Math.sin(radians)
-
 
         const z = { x: previousPoints.x + (x * distanceInput), y: previousPoints.y + (y * distanceInput)}
         setData([...data, z])
@@ -37,7 +36,6 @@ export default function Data() {
         [<ul>
             {data.map(d => <li>{d.x},{d.y}</li>)}
         </ul>]
-        
 
         <div id="map-container-1" className="map-section">
         
