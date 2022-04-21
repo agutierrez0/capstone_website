@@ -1,0 +1,41 @@
+.main-container,
+.app-background,
+.some-container,
+.outer-container,
+.text-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.main-container {
+  border-radius: 5%;
+  background-color: white;
+  align-items: center;
+  box-shadow: 0 6px 6px hsl(0deg 0% 0% / 0.3);
+  width: 15vw;
+  padding: 5%;
+}
+
+.app-background {
+  background-color: darkslategrey;
+  height: 100vh;
+  width: 100vw;
+}
+
+.some-container {
+  position: relative;
+}
+
+h2,
+h6,
+h5,
+h3 {
+  margin: 0;
+  padding: 0;
+}
+
+h3 {
+  padding-top: 10%;
+}
