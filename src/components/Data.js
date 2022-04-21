@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './data.css';
+import './css/data.css';
 import Map from './Map';
 
 export default function Data() {

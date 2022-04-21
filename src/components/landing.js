@@ -20,14 +20,8 @@ export default function Register({navigate}) {
             })
         } else {
             setVisible(true)
-            //setTimeout(() => console.log('test'), 3000)
-            //setVisible(false)
         }
     }
-
-    function navigateToRegister() {
-        navigate("/register");
-      }
 
     return <div className="app-background">
         <div className="some-container">
@@ -62,7 +56,7 @@ export default function Register({navigate}) {
                             disabled={inputDisable}
                             onClick={handleLogin}>Log in</Button>
                             <h6 style={{textAlign: 'center', cursor: 'pointer', textDecoration: 'underline'}} onClick={() => window.location.href = "/register"}>Click here to register</h6>
-                        {isValidUser === true ? <h5 style={{marginTop: "2%", color: 'green', textAlign: 'center'}}>Welcome! Redirecting you...</h5> : null}
+                        {isValidUser === true ? <h5 style={{marginTop: "2%", color: 'green', textAlign: 'center'}}>Welcome!</h5> : null}
                     </div>
                 </div>
             </div>
