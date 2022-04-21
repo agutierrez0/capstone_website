@@ -22,7 +22,7 @@ export default function Register({navigate}) {
         if (username === "" || password === "") {
             notifications.showNotification({
                 title: 'Invalid inputs.',
-                message: 'Full Name / Title cannot be empty.',
+                message: 'Username / Password cannot be empty.',
                 color: 'red'
             })
         } else {
@@ -41,6 +41,7 @@ export default function Register({navigate}) {
             setTimeout(() => {
                 window.location.href = "/dashboard"
             }, 1500)
+            sessionStorage.setItem('username', username)
         } else {
             alert('invalid username/password')
             setVisible(false)

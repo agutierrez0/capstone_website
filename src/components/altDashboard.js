@@ -8,13 +8,11 @@ import Operate from './operate';
 */
 
 import Maps from './maps';
-import Settings from './settings';
 import './css/dashboard.css';
 
 export default function Dashboard({navigate}) {
   const [opened, setOpened] = useState(true)
   const [isOperate, setIsOperate] = useState(true)
-  const [isSettings, setIsSettings] = useState(false)
   const [isMaps, setIsMaps] = useState(false)
   const theme = useMantineTheme();
 
@@ -22,15 +20,9 @@ export default function Dashboard({navigate}) {
     console.log('handleNewPage: ', page)
     if (page === 'operate') {
       setIsOperate(true)
-      setIsSettings(false)
-      setIsMaps(false)
-    } else if (page === 'settings') {
-      setIsOperate(false)
-      setIsSettings(true)
       setIsMaps(false)
     } else if (page === 'maps') {
       setIsOperate(false)
-      setIsSettings(false)
       setIsMaps(true)
     }
   }
@@ -48,7 +40,6 @@ export default function Dashboard({navigate}) {
                   height={'80vh'} >
                   <SidebarOption onClick={() => handleNewPage('operate')} txt={"Operate"} />
                   <SidebarOption onClick={() => handleNewPage('maps')} txt={"Maps"} />
-                  <SidebarOption onClick={() => handleNewPage('settings')} txt={"Settings"} />
                   </Navbar>}
               header={ <Header height={70} padding="md">
               <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
@@ -69,7 +60,6 @@ export default function Dashboard({navigate}) {
               })}>
               <div>
                 {isMaps ? <Maps /> : null}
-                {isSettings ? <Settings /> : null}
                 {isOperate ? <div> isoperate </div> : null}  
               </div>
           </AppShell>
