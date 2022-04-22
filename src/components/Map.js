@@ -23,6 +23,4 @@ export default function Map({inputData}) {
 
         cont.firstElementChild.setAttribute('overflow', 'visible')
     }, [inputData])
-    
-    return null
 }
