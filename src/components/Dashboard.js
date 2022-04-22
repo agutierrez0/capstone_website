@@ -3,9 +3,10 @@ import { AppShell, Navbar, Header, Text, useMantineTheme, Burger, MediaQuery } f
 import SidebarOption from './sidebarOption';
 import Operate from './operate';
 import Maps from './maps';
+import AltMaps from './altMaps';
 import './css/dashboard.css';
 
-export default function Dashboard({navigate}) {
+export default function Dashboard() {
   const [opened, setOpened] = useState(true)
   const [isOperate, setIsOperate] = useState(true)
   const [isMaps, setIsMaps] = useState(false)
@@ -66,7 +67,7 @@ export default function Dashboard({navigate}) {
               main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
               })}>
               <div>
-                {isMaps ? <Maps /> : null}
+                {isMaps ? <AltMaps opened={opened} /> : null}
                 {isOperate ? <Operate /> : null}  
               </div>
           </AppShell>
