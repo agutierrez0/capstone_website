@@ -5,7 +5,6 @@ import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { firebaseConfig } from '../firebaseConfig';
 import './css/data.css';
 
-console.log(firebaseConfig)
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -17,8 +16,6 @@ export default function Maps() {
 
     function handleNewData() {
         const previousPoints = data[data.length - 1]
-        console.log(angleInput)
-        console.log(distanceInput)
         const radians = angleInput * (Math.PI / 180)
         const x = Math.cos(radians)
         const y = (-1) * Math.sin(radians)

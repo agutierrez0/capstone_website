@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-
 import './css/styles.css';
 
 const serviceName = '4fafc201-1fb5-459e-8fcc-c5c9c331914b'
@@ -20,7 +19,6 @@ export default function Dashboard() {
 
     function handleReading() { 
         writeCharacteristicValue(uuids[3])
-
     }
 
     function handleToggleSwitch() { 
@@ -98,7 +96,6 @@ export default function Dashboard() {
             .catch(error => { return console.error(error); });
             return;
         } else {
-            console.log('here4')
             return alert('device is invalid')
         }
     }
