@@ -1,6 +1,5 @@
 import React from 'react';
-import Dashboard from './components/altDashboard';
-
+import Dashboard from './components/dashboard';
 import Register from './components/register';
 import Landing from './components/landing';
 import  { Routes, Route } from 'react-router-dom';

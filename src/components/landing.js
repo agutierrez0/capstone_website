@@ -72,6 +72,7 @@ export default function Register({navigate}) {
                                 onChange={(event) => setPassword(event.target.value)}
                                 disabled={visible}
                                 value={password}
+                                type="password"
                                 style={{fontFamily:'RobotoSerif'}}
                                 required />
                         </div>
