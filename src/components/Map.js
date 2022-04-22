@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import * as d3 from "d3";
 
-export default function PlotData({inputData}) {
+export default function Map({inputData}) {
     useEffect(() => {
         const cont = document.getElementById('map-container-1')
         while(cont.firstChild) {
