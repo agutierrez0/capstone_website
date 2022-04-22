@@ -3,7 +3,7 @@ import { Button, LoadingOverlay, TextInput } from '@mantine/core';
 import { useNotifications } from "@mantine/notifications";
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore"; 
-import { firebaseConfig } from './firebaseConfig';
+import { firebaseConfig } from '../firebaseConfig';
 import './css/landing.css';
 
 const app = initializeApp(firebaseConfig);

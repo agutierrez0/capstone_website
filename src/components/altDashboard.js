@@ -17,7 +17,6 @@ export default function Dashboard({navigate}) {
   const theme = useMantineTheme();
 
   function handleNewPage(page) {
-    console.log('handleNewPage: ', page)
     if (page === 'operate') {
       setIsOperate(true)
       setIsMaps(false)
@@ -52,7 +51,7 @@ export default function Dashboard({navigate}) {
                     mr="xl"
                   />
                 </MediaQuery>
-                <Text>Application header</Text>
+                <Text>Hot Wheelz RC Auto Mapper</Text>
               </div>
             </Header>}
               styles={(theme) => ({
