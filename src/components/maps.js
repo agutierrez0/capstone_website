@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Map from 'map.js';
+import Map from './map';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from "firebase/firestore"; 
 import { firebaseConfig } from '../firebaseConfig';
