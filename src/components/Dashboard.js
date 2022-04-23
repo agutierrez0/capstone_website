@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AppShell, Navbar, Header, Text, useMantineTheme, Burger, MediaQuery } from '@mantine/core';
 import SidebarOption from './sidebarOption';
 import Operate from './operate';
-import Maps from './maps';
+//import Maps from './maps';
 import AltMaps from './altMaps';
 import './css/dashboard.css';
 
