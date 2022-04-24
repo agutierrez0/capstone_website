@@ -1,31 +1,45 @@
 import { Card, Text, Badge, Button, Group } from '@mantine/core';
 import { useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs } from "firebase/firestore"; 
+import { firebaseConfig } from '../firebaseConfig';
+import { useState } from 'react';
 import './css/map.css';
 
-export default function AltMaps({opened}) {
-  const f = [1,2,3,4,5]
-  //const [maps, setMaps] = useState()
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
+export default function AltMaps() {
+  const [maps, setMaps] = useState([])
+  
   useEffect(() => {
-    
+    async function getMaps() {
+      const querySnapshot = await getDocs(collection(db, "capstone_points"))
+      querySnapshot.forEach((item) => {
+          const actualItem = item.data();
+          actualItem['dbId'] = item.id;
+          setMaps(x => [...x, actualItem])
+      })
+    }
+
+    getMaps();
   }, [])
 
   return (
-        <div className={opened ? 'map-grid-mq' : 'map-grid'}>
-            {f.map(i => <div>
-            <Card shadow="sm" style={{width: '18vw', margin: '5%'}}  >
+        <div className="map-grid">
+            {maps.map(i => 
+            <Card key={i} shadow="sm" style={{width: '18vw', margin: '5%'}}  >
               <Group position="apart" >
-                <Text weight={500}>Map Name</Text>
+                <Text weight={500} width={'100%'}>{i.mapName ? i.mapName : 'No Name'}</Text>
                 <Badge color="pink" variant="light">
-                  Map Address
+                  {i.dbId}
                 </Badge>
               </Group>
 
               <Button variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
                 View
               </Button>
-            </Card>
-                </div>)}
+            </Card> )}
         </div>
   );
 }

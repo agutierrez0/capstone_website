@@ -34,9 +34,10 @@ export default function Dashboard() {
     }
   }, [])
 
-  return <div className='app-background'><div className='outer-container'>
+  return <div className='app-background'><div className='outer-container' style={{borderRadius: '15%'}}>
       <div className='dashboard-container'>
           <AppShell
+          style={{overflow: 'hidden'}}
               padding="md"
               navbarOffsetBreakpoint="sm"
               navbar={<Navbar
@@ -66,10 +67,8 @@ export default function Dashboard() {
               styles={(theme) => ({
               main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
               })}>
-              <div>
                 {isMaps ? <AltMaps opened={opened} /> : null}
                 {isOperate ? <Operate /> : null}  
-              </div>
           </AppShell>
       </div>
   </div></div>
