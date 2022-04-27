@@ -4,6 +4,7 @@ import SidebarOption from './sidebarOption';
 import Operate from './operate';
 //import Maps from './maps';
 import AltMaps from './altMaps';
+import { Route, Routes, useParams } from 'react-router-dom';
 import './css/dashboard.css';
 
 export default function Dashboard() {
@@ -11,6 +12,8 @@ export default function Dashboard() {
   const [isOperate, setIsOperate] = useState(true)
   const [isMaps, setIsMaps] = useState(false)
   const theme = useMantineTheme();
+  const params = useParams()
+  console.log(params)
 
   function handleNewPage(page) {
     if (page === 'operate') {
@@ -27,11 +30,13 @@ export default function Dashboard() {
     window.location.href = "/"
   }
 
-  useEffect(() => {
+  useEffect(() => { 
+    /* 
     if (!sessionStorage.getItem('username')) {
       alert('please log in.')
       window.location.href = "/"
     }
+    */
   }, [])
 
   return <div className='app-background'><div className='outer-container' style={{borderRadius: '15%'}}>
@@ -67,8 +72,22 @@ export default function Dashboard() {
               styles={(theme) => ({
               main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
               })}>
+                
+                <Routes>
+                  <Route>
+                    <Route path=''>
+                      <Route path='' element={<div>dashboard</div>} />
+                      <Route path='operate' element={<div>operate</div>} />
+                      <Route path='maps' element={<div>maps</div>} />
+                      <Route path='map/:id' element={<div>map idroute</div>} />
+                    </Route>
+                  </Route>
+                </Routes>
+
+                {/* 
                 {isMaps ? <AltMaps opened={opened} /> : null}
                 {isOperate ? <Operate /> : null}  
+                */}
           </AppShell>
       </div>
   </div></div>
