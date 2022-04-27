@@ -9,34 +9,25 @@ import './css/dashboard.css';
 
 export default function Dashboard() {
   const [opened, setOpened] = useState(true)
-  const [isOperate, setIsOperate] = useState(true)
-  const [isMaps, setIsMaps] = useState(false)
   const theme = useMantineTheme();
   const params = useParams()
   console.log(params)
 
   function handleNewPage(page) {
-    if (page === 'operate') {
-      setIsOperate(true)
-      setIsMaps(false)
-    } else if (page === 'maps') {
-      setIsOperate(false)
-      setIsMaps(true)
-    }
+    window.location.href = `/dashboard/${page}`
   }
 
   function handleLogOut() {
     sessionStorage.clear()
     window.location.href = "/"
   }
+  
 
   useEffect(() => { 
-    /* 
     if (!sessionStorage.getItem('username')) {
       alert('please log in.')
       window.location.href = "/"
     }
-    */
   }, [])
 
   return <div className='app-background'><div className='outer-container' style={{borderRadius: '15%'}}>
@@ -76,9 +67,9 @@ export default function Dashboard() {
                 <Routes>
                   <Route>
                     <Route path=''>
-                      <Route path='' element={<div>dashboard</div>} />
-                      <Route path='operate' element={<div>operate</div>} />
-                      <Route path='maps' element={<div>maps</div>} />
+                      <Route path='' element={<Operate />} />
+                      <Route path='operate' element={<Operate />} />
+                      <Route path='maps' element={<AltMaps />} />
                       <Route path='map/:id' element={<div>map idroute</div>} />
                     </Route>
                   </Route>
