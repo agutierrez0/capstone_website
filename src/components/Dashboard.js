@@ -3,7 +3,7 @@ import { AppShell, Navbar, Header, Text, useMantineTheme, Burger, MediaQuery } f
 import SidebarOption from './sidebarOption';
 import Operate from './operate';
 import SingleMap from './singleMap';
-import AltMaps from './altMaps';
+import AltMaps from './maps';
 import { Route, Routes } from 'react-router-dom';
 import './css/dashboard.css';
 
@@ -11,15 +11,10 @@ export default function Dashboard() {
   const [opened, setOpened] = useState(true)
   const theme = useMantineTheme();
 
-  function handleNewPage(page) {
-    window.location.href = `/dashboard/${page}`
-  }
-
   function handleLogOut() {
     sessionStorage.clear()
     window.location.href = "/"
   }
-  
 
   useEffect(() => { 
     if (!sessionStorage.getItem('username')) {
@@ -40,8 +35,8 @@ export default function Dashboard() {
                   hidden={!opened}
                   width={{ sm: 300, lg: 400 }}
                   height={'80vh'} >
-                  <SidebarOption onClick={() => handleNewPage('operate')} txt={"Operate"} />
-                  <SidebarOption onClick={() => handleNewPage('maps')} txt={"Maps"} />
+                  <SidebarOption onClick={() => window.location.href = '/dashboard/operate'} txt={"Operate"} />
+                  <SidebarOption onClick={() => window.location.href = '/dashboard/maps'} txt={"Maps"} />
                   <SidebarOption onClick={handleLogOut} txt={"Log Out"} />
                   </Navbar>}
               header={ <Header height={70} padding="md">
