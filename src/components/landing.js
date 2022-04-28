@@ -25,6 +25,8 @@ export default function Register({navigate}) {
                 message: 'Username / Password cannot be empty.',
                 color: 'red'
             })
+            setVisible(false)
+            return
         } else {
             const querySnapshot = await getDocs(collection(db, "capstone_users"))
             querySnapshot.forEach((item) => {
@@ -63,6 +65,7 @@ export default function Register({navigate}) {
                                 disabled={visible}
                                 value={username}
                                 style={{fontFamily:'RobotoSerif'}}
+                                onKeyDown={(event) => event.key === 'Enter' ? handleLogin() : null}
                                 required={true} />
                         </div>
                         
@@ -74,6 +77,7 @@ export default function Register({navigate}) {
                                 value={password}
                                 type="password"
                                 style={{fontFamily:'RobotoSerif'}}
+                                onKeyDown={(event) => event.key === 'Enter' ? handleLogin() : null}
                                 required />
                         </div>
 
