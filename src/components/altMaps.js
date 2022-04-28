@@ -27,8 +27,8 @@ export default function AltMaps() {
 
   return (
         <div className="map-grid">
-            {maps.map(i => 
-            <Card key={i} shadow="sm" style={{width: '18vw', margin: '5%'}}  >
+            {maps.map((i,keyId) => 
+            <Card key={keyId} shadow="sm" style={{width: '18vw', margin: '5%'}}  >
               <Group position="apart" >
                 <Text weight={500} width={'100%'}>{i.mapName ? i.mapName : 'No Name'}</Text>
                 <Badge color="pink" variant="light">
@@ -36,7 +36,7 @@ export default function AltMaps() {
                 </Badge>
               </Group>
 
-              <Button variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+              <Button onClick={() => window.location.href = `/dashboard/map/${i.dbId}`} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
                 View
               </Button>
             </Card> )}

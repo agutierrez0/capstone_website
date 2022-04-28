@@ -2,16 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { AppShell, Navbar, Header, Text, useMantineTheme, Burger, MediaQuery } from '@mantine/core';
 import SidebarOption from './sidebarOption';
 import Operate from './operate';
-//import Maps from './maps';
+import SingleMap from './singleMap';
 import AltMaps from './altMaps';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './css/dashboard.css';
 
 export default function Dashboard() {
   const [opened, setOpened] = useState(true)
   const theme = useMantineTheme();
-  const params = useParams()
-  console.log(params)
 
   function handleNewPage(page) {
     window.location.href = `/dashboard/${page}`
@@ -70,15 +68,10 @@ export default function Dashboard() {
                       <Route path='' element={<Operate />} />
                       <Route path='operate' element={<Operate />} />
                       <Route path='maps' element={<AltMaps />} />
-                      <Route path='map/:id' element={<div>map idroute</div>} />
+                      <Route path='map/:id' element={<SingleMap />} />
                     </Route>
                   </Route>
                 </Routes>
-
-                {/* 
-                {isMaps ? <AltMaps opened={opened} /> : null}
-                {isOperate ? <Operate /> : null}  
-                */}
           </AppShell>
       </div>
   </div></div>
