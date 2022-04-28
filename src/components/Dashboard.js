@@ -63,6 +63,7 @@ export default function Dashboard() {
                       <Route path='' element={<Operate />} />
                       <Route path='operate' element={<Operate />} />
                       <Route path='maps' element={<AltMaps />} />
+                      <Route path='map/create' element={<SingleMap />} />
                       <Route path='map/:id' element={<SingleMap />} />
                     </Route>
                   </Route>

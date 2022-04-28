@@ -62,6 +62,9 @@ export default function Operate() {
             .then(value => {
                 if (value) {
                     if (uuid === '7d51feca-c876-4482-9a66-f0ccb953e732') {
+                        var decoder2 = new TextDecoder()
+                        const message = decoder2.decode(value)
+                        console.log({message})
                         console.log("IMPORTANT VALUE: ", value)
                     }
                     var decoder = new TextDecoder()

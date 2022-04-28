@@ -12,8 +12,23 @@ const db = getFirestore(app);
 export default function SingleMap() {
     const [mapName, setMapName] = useState('')
     const [creator, setCreator] = useState('')
+    const [distanceInput, setDistanceInput] = useState('')
+    const [angleInput, setAngleInput] = useState('')
     const [data, setData] = useState([])
     const { id } = useParams()
+
+    function handleNewData() {
+        const previousPoints = data[data.length - 1]
+        console.log(angleInput)
+        console.log(distanceInput)
+        const radians = angleInput * (Math.PI / 180)
+        const x = Math.cos(radians)
+        const y = (-1) * Math.sin(radians)
+
+
+        const z = { x: previousPoints.x + (x * distanceInput), y: previousPoints.y + (y * distanceInput)}
+        setData(d => [...d, z])
+    }
 
     useEffect(() => {
         async function getMap() {
@@ -35,6 +50,17 @@ export default function SingleMap() {
 
     return <div className="data-container">
          <div className="data-input-section">
+            <div>
+                <label>Distance</label>
+                <input onChange={(event) => setDistanceInput(event.target.value)}></input>
+            </div>
+
+            <div>
+                <label>Angles</label>
+                <input onChange={(event) => setAngleInput(event.target.value)}></input>
+            </div>
+            
+            <button onClick={handleNewData}>Add point</button>
             <div style={{display: 'flex', flexDirection: 'column'}}>
                 <label>Map Name</label>
                 <div>{mapName}</div>
@@ -44,7 +70,7 @@ export default function SingleMap() {
         </div>
 
         <div id="map-container-1" className="map-section">
-            {data.length > 0 ? <Map inputData={data} /> : null}
+            {data.length > 1 ? <Map inputData={data} /> : null}
         </div>
     </div>
 }
