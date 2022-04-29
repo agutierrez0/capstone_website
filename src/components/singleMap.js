@@ -50,17 +50,6 @@ export default function SingleMap() {
 
     return <div className="data-container">
          <div className="data-input-section">
-            <div>
-                <label>Distance</label>
-                <input onChange={(event) => setDistanceInput(event.target.value)}></input>
-            </div>
-
-            <div>
-                <label>Angles</label>
-                <input onChange={(event) => setAngleInput(event.target.value)}></input>
-            </div>
-            
-            <button onClick={handleNewData}>Add point</button>
             <div style={{display: 'flex', flexDirection: 'column'}}>
                 <label>Map Name</label>
                 <div>{mapName}</div>

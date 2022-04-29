@@ -1,4 +1,3 @@
-import { useToggle } from '@mantine/hooks';
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import './css/styles.css';
@@ -38,17 +37,25 @@ export default function Operate() {
     }
 
     useEffect(() => {
+        function handleNewData(angle, distance) {
+            const previousPoints = data[data.length - 1]
+            const radians = angle * (Math.PI / 180)
+            const x = Math.cos(radians)
+            const y = (-1) * Math.sin(radians)
+            const z = { x: previousPoints.x + (x * distance * .2), y: previousPoints.y + (y * distance * .2)}
+            setData(d => [...d, z])
+        }
+
         if (status && distance && angle) {
-            console.log({status, distance, angle})
-            handleNewData(angle, distance)
-            console.log(data)
+            if (status === 'stopping') {
+                console.log({status, distance, angle})
+                handleNewData(angle, distance)
+            }            
         }
     }, [status, distance, angle])
     function handleReading() { 
         writeCharacteristicValue(uuids[3])
-    }
-
-    
+    }    
 
     function handleToggleSwitch() { 
         if (!switchToggle) {
@@ -82,15 +89,6 @@ export default function Operate() {
         }
         setActive(!active);
         return;
-    }
-
-    function handleNewData(angle, distance) {
-        const previousPoints = data[data.length - 1]
-        const radians = angle * (Math.PI / 180)
-        const x = Math.cos(radians)
-        const y = (-1) * Math.sin(radians)
-        const z = { x: previousPoints.x + (x * distance), y: previousPoints.y + (y * distance)}
-        setData(d => [...d, z])
     }
 
     function readCharacteristicValue(uuid, elementId) {
