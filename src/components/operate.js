@@ -1,5 +1,15 @@
+import { useToggle } from '@mantine/hooks';
 import React, { useState } from 'react'
+import { useEffect } from 'react';
 import './css/styles.css';
+import Map from './map';
+import './css/data.css';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc } from "firebase/firestore"; 
+import { firebaseConfig } from '../firebaseConfig';
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 const serviceName = '4fafc201-1fb5-459e-8fcc-c5c9c331914b'
 const uuids = ['beb5483e-36e1-4688-b7f5-ea07361b26a8', 
@@ -17,19 +27,39 @@ export default function Operate() {
     const [myInterval, setMyInterval] = useState(null)
     const [active, setActive] = useState(false)
 
+    const [status, setStatus] = useState()
+    const [distance, setDistance] = useState()
+    const [angle, setAngle] = useState()
+
+    const [data, setData] = useState([{x: 0, y: 0}])
+
+    async function handleSaveMap() {
+        await addDoc(collection(db, "capstone_points"), { createdBy: 'angel', points: data, mapName: 'testing123' });
+    }
+
+    useEffect(() => {
+        if (status && distance && angle) {
+            console.log({status, distance, angle})
+            handleNewData(angle, distance)
+            console.log(data)
+        }
+    }, [status, distance, angle])
     function handleReading() { 
         writeCharacteristicValue(uuids[3])
     }
 
+    
+
     function handleToggleSwitch() { 
         if (!switchToggle) {
             setMyInterval(setInterval(() => {
+                /* 
                 readCharacteristicValue(uuids[0], 'ultrasonic-sensor')
                 readCharacteristicValue(uuids[1], 'movement-status')
-                readCharacteristicValue(uuids[2], 'manometer-reading')
-                readCharacteristicValue(uuids[3], 'left-reading')
-                readCharacteristicValue(uuids[4], 'front-reading')
-                readCharacteristicValue(uuids[5], 'right-reading')
+                readCharacteristicValue(uuids[2], 'manometer-reading')*/
+                readCharacteristicValue(uuids[0], 'status-reading') // status
+                readCharacteristicValue(uuids[1], 'front-reading') // distance
+                readCharacteristicValue(uuids[6], 'right-reading') // angle
             }, 1000))
         } else {            
             clearInterval(myInterval)
@@ -47,11 +77,20 @@ export default function Operate() {
             myServer.getPrimaryService(serviceName)
             .then(service => service.getCharacteristic(uuid))
             .then(characteristic => characteristic.writeValueWithResponse(view))
-            .then(res => console.log(res))
-            .catch(error => { return console.error(error); });
+            .then(res => res ? console.log(res) : null)
+            .catch(error => { return console.log(error); });
         }
         setActive(!active);
         return;
+    }
+
+    function handleNewData(angle, distance) {
+        const previousPoints = data[data.length - 1]
+        const radians = angle * (Math.PI / 180)
+        const x = Math.cos(radians)
+        const y = (-1) * Math.sin(radians)
+        const z = { x: previousPoints.x + (x * distance), y: previousPoints.y + (y * distance)}
+        setData(d => [...d, z])
     }
 
     function readCharacteristicValue(uuid, elementId) {
@@ -61,20 +100,20 @@ export default function Operate() {
             .then(characteristic => characteristic.readValue())
             .then(value => {
                 if (value) {
-                    if (uuid === '7d51feca-c876-4482-9a66-f0ccb953e732') {
-                        var decoder2 = new TextDecoder()
-                        const message = decoder2.decode(value)
-                        console.log({message})
-                        console.log("IMPORTANT VALUE: ", value)
-                    }
                     var decoder = new TextDecoder()
                     const message = decoder.decode(value)
                     const thisElement = document.getElementById(elementId)
+
+                    if (uuid === uuids[0]) {
+                        setStatus(message)
+                    } else if (uuid === uuids[1]) { // front reading = distance
+                        setDistance(value.getUint8(0))
+                    } else if (uuid === uuids[6]) { // right reading = angle
+                        setAngle(value.getUint8(0))
+                    }
                     if (message.length === 4) {
-                        console.log(`message isn't string: ${value.getUint8(0)}`)
                         thisElement.innerText = `${value.getUint8(0)} ${elementId === 'manometer-reading' ? '°' : 'cm'}`
                     } else {
-                        console.log(`message is string: ${message}`)
                         thisElement.innerText = message
                     }
                 } else {
@@ -82,7 +121,7 @@ export default function Operate() {
                 }
                 return;
             })
-            .catch(error => { return console.error(error); });
+            .catch(error => { return console.log(error); });
             return;
         }
     }
@@ -139,6 +178,8 @@ export default function Operate() {
                                     <input onClick={handleToggleSwitch} type="checkbox" />
                                     <span className="slider round"></span>
                                 </label> 
+                                <h4>SAVE MAP</h4>
+                                <button onClick={handleSaveMap}>SAVE MAP</button>
 
                                 {switchToggle ? <table>
                                     <thead>
@@ -149,20 +190,8 @@ export default function Operate() {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Ultrasonic Sensor Reading</td>
-                                            <td id="ultrasonic-sensor"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Movement Status</td>
-                                            <td id="movement-status"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Manometer Reading</td>
-                                            <td id="manometer-reading"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Left Reading</td>
-                                            <td id="left-reading"></td>
+                                            <td>Car Status</td>
+                                            <td id="status-reading"></td>
                                         </tr>
                                         <tr>
                                             <td>Front Reading</td>
@@ -188,6 +217,10 @@ export default function Operate() {
                             <h4>Please connect the device</h4>
                             <button onClick={getBluetoothDevice}>Search for bluetooth device</button>
                         </div>}
+
+                        <div id="map-container-1" className="map-section">
+                            {data.length > 1 ? <Map inputData={data} /> : null}
+                        </div>
                     </div>
                 </div>
             </div>
