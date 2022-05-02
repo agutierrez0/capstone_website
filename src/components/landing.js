@@ -9,7 +9,7 @@ import './css/landing.css';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export default function Register() {
+export default function Landing() {
     const [visible, setVisible] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
